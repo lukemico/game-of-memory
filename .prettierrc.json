@@ -1,0 +1,8 @@
+{
+    "bracketSameLine": true,
+    "endOfLine": "lf",
+    "insertPragma": false,
+    "proseWrap": "always",
+    "requirePragma": false,
+    "tabWidth": 4
+}
