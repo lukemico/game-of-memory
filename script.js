@@ -1,6 +1,7 @@
 // Requirements
+
 // Cards should be laid out on a 6x6 grid, all face down initially (i.e. numbers not showing)
-// Add pseudo-class to hide number son page load
+// Add pseudo-class to hide numbers on page load
 
 // There should be a total of 36 cards with the numbers 1-18 (two of each), placed randomly on the grid
 // DONE
@@ -22,72 +23,6 @@
 
 // Clicking 'Play again' should generate a new, random set of cards on the grid
 
-// let body;
-// let grid = document.getElementById("#grid");
-// let square = document.getElementsByClassName(".square");
-
-// let squareValue = document.getElementsByClassName(".square").value;
-
-// let table = document.getElementById("gamecard");
-
-// let dict = [];
-// let cardsturned = 0;
-// let pairsturned = 0;
-// let card1 = 0;
-// let card2 = 0;
-
-// start();
-
-// function start() {
-//     dict = [];
-//     cardsturned = 0;
-//     pairsturned = 0;
-//     card1 = 0;
-//     card2 = 0;
-
-//     let table = document.getElementById("gamecard");
-//     table.innerHTML = "";
-
-//     for (let i = 0; i < 6; i++) {
-//         var tr = document.createElement("tr");
-//         table.appendChild(tr);
-//         for (let j = 0; j < 6; j++) {
-//             var td = document.createElement("td");
-//             let btn = document.createElement("button");
-//             let rdm = Math.floor(Math.random() * (18 - 1 + 1) + 1);
-//             while (dict[rdm] == 2) {
-//                 rdm = Math.floor(Math.random() * (18 - 1 + 1) + 1);
-//             }
-//             if (dict[rdm] == 1) {
-//                 dict[rdm]++;
-//             } else {
-//                 dict[rdm] = 1;
-//             }
-//             btn.innerHTML = "";
-//             btn.id = rdm + "-" + dict[rdm];
-
-//             btn.onclick = function () {
-//                 btn_click(this);
-//             };
-//             td.appendChild(btn);
-//             tr.appendChild(td);
-//         }
-//     }
-// }
-
-// const cards = document.querySelectorAll(".memory-card");
-
-// let hasFlippedCard = false;
-// let firstCard, secondCard;
-
-// function flipCard() {
-//     // https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
-//     // this.classList.toggle("flip");
-//     this.classList.add("flip");
-// }
-
-// cards.forEach((card) => card.addEventListener("click", flipCard));
-
 const cards = document.querySelectorAll(".memory-card");
 
 let hasFlippedCard = false;
@@ -101,32 +36,30 @@ function flipCard() {
     this.classList.add("flip");
 
     if (!hasFlippedCard) {
+        // first click
         hasFlippedCard = true;
         firstCard = this;
+
         return;
     }
 
+    // second click
     secondCard = this;
-    // hasFlippedCard = false;
 
     checkForMatch();
 }
 
 function checkForMatch() {
-    if (firstCard.dataset.framework === secondCard.dataset.framework) {
-        disableCards();
-        return;
-    }
+    let isMatch = firstCard.dataset.framework === secondCard.dataset.framework;
 
-    unflipCards();
+    isMatch ? disableCards() : unflipCards();
 }
-
-// let isMatch = firstCard.dataset.framework === secondCard.dataset.framework;
-// isMatch ? disableCards() : unflipCards();
 
 function disableCards() {
     firstCard.removeEventListener("click", flipCard);
     secondCard.removeEventListener("click", flipCard);
+
+    resetBoard();
 }
 
 function unflipCards() {
@@ -136,8 +69,40 @@ function unflipCards() {
         firstCard.classList.remove("flip");
         secondCard.classList.remove("flip");
 
-        lockBoard = false;
+        resetBoard();
     }, 1500);
 }
 
+function resetBoard() {
+    [hasFlippedCard, lockBoard] = [false, false];
+    [firstCard, secondCard] = [null, null];
+}
+
+(function shuffle() {
+    cards.forEach((card) => {
+        let randomPos = Math.floor(Math.random() * 12);
+        card.style.order = randomPos;
+    });
+})();
+
 cards.forEach((card) => card.addEventListener("click", flipCard));
+
+function startGame() {
+    correct_flips = 0;
+    last_flipped = [];
+    moves = 0;
+    seconds = 0;
+    minutes = 0;
+    seconds_str = "";
+    minutes_str = "";
+    // time.innerHTML = "XX:XX";
+    // counter.innerHTML = "0";
+    // container.innerHTML = "";
+    cards.forEach((el) => el.classList.remove("flip"));
+    // clearInterval(timer_observer);
+    // spreadCards(box);
+    // container.childNodes.forEach((node) =>
+    //     node.firstElementChild.classList.remove("matchingcards")
+    // );
+    // startWatching(seconds, minutes);
+}
